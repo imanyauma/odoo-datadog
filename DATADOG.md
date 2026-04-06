@@ -45,4 +45,4 @@ odoo.http.root = TracingMiddleware(odoo.http.root)
 
 ### 3. Setup Docker for Odoo
 
-Refer to [docker/README.md](./README.md) for the full Docker setup instructions for Odoo.
+Refer to [docker/README.md](./docker/README.md) for the full Docker setup instructions for Odoo.
