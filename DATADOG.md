@@ -1,5 +1,11 @@
 # Datadog APM Integration for Odoo
 
+## Prerequisites
+
+1. **Datadog Agent installed** — The Datadog Agent must be installed and running on the host before enabling APM tracing. Refer to the [Datadog Agent Installation Documentation](https://docs.datadoghq.com/agent/) for setup instructions.
+
+---
+
 ## Steps
 
 ### 1. Install `ddtrace` Library
@@ -46,3 +52,9 @@ odoo.http.root = TracingMiddleware(odoo.http.root)
 ### 3. Setup Docker for Odoo
 
 Refer to [docker/README.md](./docker/README.md) for the full Docker setup instructions for Odoo.
+Add this following environment variables on docker-compose.yml to enable tagging
+- DD_SERVICE
+- DD_ENV
+- DD_VERSION
+- DD_PROFILING_ENABLED (optional to enable profiling)
+- DD_AGENT_HOST (to communicate with Docker agent using host IP)
