@@ -1,0 +1,30 @@
+#!/usr/bin/python3
+import tempfile
+import odoo
+# import os
+
+from ddtrace.contrib.wsgi import DDWSGIMiddleware
+from ddtrace import patch_all, tracer
+
+# Patch all libraries supported by ddtrace
+patch_all()
+
+class TracingMiddleware(DDWSGIMiddleware):
+    """
+    Thin subclass of DDWSGIMiddleware that delegates attribute access
+    to the wrapped Odoo application, preserving session_store and
+    any other attributes Odoo expects on http.root.
+    """
+    def __init__(self, app, *args, **kwargs):
+        super().__init__(app, *args, **kwargs)
+        self._odoo_app = app  # keep a direct reference
+
+    def __getattr__(self, name):
+        # Fall back to the wrapped Odoo app for any unknown attribute
+        # This covers session_store, db_filter, etc.
+        return getattr(self._odoo_app, name)
+
+odoo.http.root = TracingMiddleware(odoo.http.root)
+
+if __name__ == "__main__":
+    odoo.cli.main()
